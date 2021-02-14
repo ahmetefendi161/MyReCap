@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Business.Abstract
 {
-    public interface IColorService: IBaseService<Color>
+    public interface ICustomerService: IBaseService<Customer>
     {
-        IDataResult<Color> GetById(int id);
+        IDataResult<Customer> GetById(int id);
     }
 }

@@ -11,8 +11,10 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFrameWork.Repository
 {
-    public class EfBrandDal : EfEntityRepositoryBase<Brand,RentACarContext>,IBrandDal
+    public class EfBrandDal : EfEntityRepositoryBase<Brand, RentACarContext>, IBrandDal
     {
-
+        public EfBrandDal(RentACarContext context) : base(context)
+        {
+        }
     }
 }
