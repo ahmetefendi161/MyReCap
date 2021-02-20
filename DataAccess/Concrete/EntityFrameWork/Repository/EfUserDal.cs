@@ -11,8 +11,8 @@ namespace DataAccess.Concrete.EntityFrameWork.Repository
     
     public class EfUserDal : EfEntityRepositoryBase<User, RentACarContext>, IUserDal
     {
-        public EfUserDal(RentACarContext context) : base(context)
-        {
-        }
+        //public EfUserDal(RentACarContext context) : base(context)
+        //{
+        //}
     }
 }

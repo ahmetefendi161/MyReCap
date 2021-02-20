@@ -1,7 +1,8 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Business.Utilities;
+
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -21,14 +22,11 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand businessEntity)
         {
-            var validationResult = ValidationTool.Validate(new BrandValidator(), businessEntity);
-            if (validationResult.Errors.Count > 0)
-            {
-                return new ErrorResult(validationResult.Errors.Select(x => x.ErrorMessage).Aggregate((a, b) => $"--{a}\n--{b}"));
-            }
-            else if (_brandDal.Get(c => c.BrandName.ToLower() == businessEntity.BrandName.ToLower()) != null)
+            
+            if (_brandDal.Get(c => c.BrandName.ToLower() == businessEntity.BrandName.ToLower()) != null)
             {
                 return new ErrorResult(Messages.brandAddError);
             }
@@ -37,36 +35,30 @@ namespace Business.Concrete
 
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
+        public IResult Update(Brand businessEntity)
+        {
+
+            _brandDal.Update(businessEntity);
+            return new SuccessResult(Messages.brandUpdated);
+
+
+
+        }
+
         public IResult Delete(Brand businessEntity)
         {
-             if (_brandDal.Get(c => c.Id == businessEntity.Id) != null)
-             {
-                _brandDal.Delete(businessEntity);
+            var result = _brandDal.Get(c => c.Id == businessEntity.Id);
+            if ( result != null)
+            {
+                _brandDal.Delete(result);
                 return new SuccessResult(Messages.brandDeleted);
-             }
-            
+            }
+
             return new ErrorResult(Messages.brandDeletedError);
 
         }
-
-        public IResult Update(Brand businessEntity)
-        {
-            var validationResult = ValidationTool.Validate(new BrandValidator(), businessEntity);
-            if (validationResult.Errors.Count > 0)
-            {
-                return new ErrorResult(validationResult.Errors.Select(x => x.ErrorMessage).Aggregate((a, b) => $"--{a}\n--{b}"));
-            }
-            else if (_brandDal.Get(c => c.BrandName.ToLower() == businessEntity.BrandName.ToLower()) != null)
-            {
-                return new ErrorResult(Messages.brandUpdateError);
-            }
-            _brandDal.Update(businessEntity);
-            return new SuccessResult(Messages.brandUpdated);
-            
-           
-
-        }
-
+               
         public IDataResult<List<Brand>> GetAll()
         {
             return new SuccessDataResult<List<Brand>>(_brandDal.GetAll());

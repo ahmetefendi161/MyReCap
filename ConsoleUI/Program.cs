@@ -17,79 +17,102 @@ namespace ConsoleUI
         {
 
             #region oDEV10
-            RentACarContext context = new RentACarContext();
+
+
+
+            ////CustomerManager customerManager = new CustomerManager(new EfCustomerDal(context));
+            //RentalManager rentalManager = new RentalManager(new EfRentalDal(context));
+            //Rental rental = new Rental { Id = 17, CarId = 4/*, CustomerId = 2, IsRented = true, RentDate = null, ReturnDate = null*/ };
+            //
+
+            //var result = brandm.Delete(brand);
+            //context.SaveChanges();
+            //Console.WriteLine("{0} {1}", result.Success, result.Message);
+
+
+
+            RentACarContext contextx = null;
             
-            RentalManager rentalManager = new RentalManager(new EfRentalDal(context));
-            CustomerManager customerManager = new CustomerManager(new EfCustomerDal(context));
-            Rental rental = new Rental { Id = 18, CarId = 4/*, CustomerId = 2, IsRented = true, RentDate = null, ReturnDate = null*/ };
+            Car car = new Car { Id = 8006 };
+
+
+            contextx = new RentACarContext();
             
-            var result= rentalManager.Delete(rental);
-            context.SaveChanges();
-            Console.WriteLine("{0} {1}", result.Success, result.Message);
-            foreach (var r in customerManager.GetAll().Data)
-            {
 
-                Console.WriteLine("{0}\t{1}",
-                    r.Id,
-                    r.CompanyName
-                    );
-            }
+                CarManager brandmanager = new CarManager(new EfCarDal());
+                var result = brandmanager.Delete(car);
+                var result2 = contextx.SaveChanges();
+                Console.WriteLine("{0} {1}", result.Success, result.Message);
+            
+           
 
-            Console.WriteLine("\n-----------------------End of List---------------------------------");
 
-            foreach (var r in rentalManager.GetAll().Data)
-            {
-                
-                Console.WriteLine("{0}\t{1}\t{2}\t\t{3}\t\t{4}\t{5}",
-                    r.Id,
-                    r.CarId,
-                    r.CustomerId,
-                    r.RentDate,
-                    r.ReturnDate,
-                    r.IsRented
-                    );
-                
-            }
 
-            Console.WriteLine("\n-----------------------End of List---------------------------------");
 
-            foreach (var r in rentalManager.GetRentalDetailsDto().Data)
-            {
+            //foreach (var r in customerManager.GetAll().Data)
+            //{
 
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
-                    r.Id,
-                    r.BrandName,
-                    r.UserFirstName + " " + r.UserLastName,
-                    r.CompanyName,
-                    r.RentDate,
-                    r.ReturnDate,
-                    r.IsRented
-                    );
-            }
+            //    Console.WriteLine("{0}\t{1}",
+            //        r.Id,
+            //        r.CompanyName
+            //        );
+            //}
 
-            Console.WriteLine("\n-----------------------End of List---------------------------------");
+            //Console.WriteLine("\n-----------------------End of List---------------------------------");
 
-            foreach (var r in rentalManager.GetRentalDetailsByCarIdDto(2).Data)
-            {
+            //foreach (var r in rentalManager.GetAll().Data)
+            //{
 
-                Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+            //    Console.WriteLine("{0}\t{1}\t{2}\t\t{3}\t\t{4}\t{5}",
+            //        r.Id,
+            //        r.CarId,
+            //        r.CustomerId,
+            //        r.RentDate,
+            //        r.ReturnDate,
+            //        r.IsRented
+            //        );
 
-                    r.Id,
-                    r.BrandName,
-                    r.UserFirstName + " " + r.UserLastName,
-                    r.CompanyName,
-                    r.RentDate,
-                    r.ReturnDate,
-                    r.IsRented
-                    );
-            }
+            //}
+
+            //Console.WriteLine("\n-----------------------End of List---------------------------------");
+
+            //foreach (var r in rentalManager.GetRentalDetailsDto().Data)
+            //{
+
+            //    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+            //        r.Id,
+            //        r.BrandName,
+            //        r.UserFirstName + " " + r.UserLastName,
+            //        r.CompanyName,
+            //        r.RentDate,
+            //        r.ReturnDate,
+            //        r.IsRented
+            //        );
+            //}
+
+            //Console.WriteLine("\n-----------------------End of List---------------------------------");
+
+            //foreach (var r in rentalManager.GetRentalDetailsByCarIdDto(2).Data)
+            //{
+
+            //    Console.WriteLine("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+
+            //        r.Id,
+            //        r.BrandName,
+            //        r.UserFirstName + " " + r.UserLastName,
+            //        r.CompanyName,
+            //        r.RentDate,
+            //        r.ReturnDate,
+            //        r.IsRented
+            //        );
+            //}
 
             #endregion
 
 
-            //IUnitOfWork services = new UnitOfWork(context);
+            //nitOfWork services = new UnitOfWork(context);
             //Car car = new Car  { BrandId = 6, ColorId = 3, ModelYear = 0, DailyPrice = 0, Descriptions = "f" };
-            //Brand brand = new Brand { Id = 6, BrandName="sdsdsdsdsd" };
+
 
 
 

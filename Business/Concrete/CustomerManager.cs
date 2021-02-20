@@ -1,6 +1,5 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Business.Utilities;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstarct;
@@ -42,9 +41,10 @@ namespace Business.Concrete
 
         public IResult Delete(Customer businessEntity)
         {
-            if (_customerDal.Get(c => c.Id == businessEntity.Id) != null)
+            var result = _customerDal.Get(c => c.Id == businessEntity.Id);
+            if (result != null)
             {
-                _customerDal.Delete(businessEntity);
+                _customerDal.Delete(result);
                 return new SuccessResult(Messages.customerDeleted);
             }
 

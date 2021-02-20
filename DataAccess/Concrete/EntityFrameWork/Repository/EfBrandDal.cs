@@ -13,8 +13,8 @@ namespace DataAccess.Concrete.EntityFrameWork.Repository
 {
     public class EfBrandDal : EfEntityRepositoryBase<Brand, RentACarContext>, IBrandDal
     {
-        public EfBrandDal(RentACarContext context) : base(context)
-        {
-        }
+        //public EfBrandDal(RentACarContext context) : base(context)
+        //{
+        //}
     }
 }

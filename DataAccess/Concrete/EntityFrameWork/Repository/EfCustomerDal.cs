@@ -11,9 +11,9 @@ namespace DataAccess.Concrete.EntityFrameWork.Repository
    
     public class EfCustomerDal : EfEntityRepositoryBase<Customer, RentACarContext>, ICustomerDal
     {
-        public EfCustomerDal(RentACarContext context) : base(context)
-        {
+        //public EfCustomerDal(RentACarContext context) : base(context)
+        //{
 
-        }
+        //}
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Business.Utilities;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -22,39 +22,31 @@ namespace Business.Concrete
             _carDal = carDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car businessEntity)
         {
-            var validationResult = ValidationTool.Validate(new CarValidator(), businessEntity);
-            if (validationResult.Errors.Count > 0)
-            {
-                return new ErrorResult(validationResult.Errors.Select(x => x.ErrorMessage).Aggregate((a, b) => $"--{a}\n--{b}"));
-            }
-            
             _carDal.Add(businessEntity);
             return new SuccessResult(Messages.carAdded);
         }
 
+        [ValidationAspect(typeof(CarValidator))]
+        public IResult Update(Car businessEntity)
+        {
+            _carDal.Update(businessEntity);
+            return new SuccessResult(Messages.carUpdated);
+
+        }
+
         public IResult Delete(Car businessEntity)
         {
-            if (_carDal.Get(c => c.Id == businessEntity.Id) != null)
+            var result = _carDal.Get(c => c.Id == businessEntity.Id);
+            if (result != null)
             {
-                _carDal.Delete(businessEntity);
+                _carDal.Delete(result);
                 return new SuccessResult(Messages.carDeleted);
             }
 
             return new ErrorResult(Messages.carDeletedError);
-        }
-
-        public IResult Update(Car businessEntity)
-        {
-            var validationResult = ValidationTool.Validate(new BrandValidator(), businessEntity);
-            if (validationResult.Errors.Count > 0)
-            {
-                return new ErrorResult(validationResult.Errors.Select(x => x.ErrorMessage).Aggregate((a, b) => $"--{a}\n--{b}"));
-            }
-            _carDal.Update(businessEntity);
-            return new SuccessResult(Messages.carUpdated);
-
         }
 
         public IDataResult<List<Car>> GetAll()
@@ -92,6 +84,16 @@ namespace Business.Concrete
         public IDataResult<IEnumerable<CarDetailDto>> GetCarDetails()
         {
             return new SuccessDataResult<IEnumerable<CarDetailDto>>(_carDal.GetCarDetails());
+        }
+
+        public IDataResult<IEnumerable<CarDetailDto>> GetCarDetailsByColorId(int colorId)
+        {
+            return new SuccessDataResult<IEnumerable<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId));
+        }
+
+        public IDataResult<IEnumerable<CarDetailDto>> GetCarDetailsByBrandId(int brandId)
+        {
+            return new SuccessDataResult<IEnumerable<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId));
         }
     }
 }

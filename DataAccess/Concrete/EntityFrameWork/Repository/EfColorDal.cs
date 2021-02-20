@@ -13,8 +13,8 @@ namespace DataAccess.Concrete.EntityFrameWork.Repository
 {
     public class EfColorDal : EfEntityRepositoryBase<Color, RentACarContext>, IColorDal
     {
-        public EfColorDal(RentACarContext context) : base(context)
-        {
-        }
+        //public EfColorDal(RentACarContext context) : base(context)
+        //{
+        //}
     }
 }

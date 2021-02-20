@@ -26,6 +26,7 @@ namespace Business.Concrete
             var result = IsNotRented(businessEntity.CarId);
             if (result.Success)
             {
+                businessEntity.IsRented = true;
                 _rentalDal.Add(businessEntity);
                 return new SuccessResult(Messages.rentalAdded);
                
@@ -34,17 +35,9 @@ namespace Business.Concrete
 
         }
 
-        public IDataResult<List<Rental>> IsNotRented(int carId)
+        public IResult Update(Rental businessEntity)
         {
-            var result = _rentalDal.GetAll(c => c.CarId == carId && c.IsRented ==true);
-            if (result.ToList().Count>0)
-            {
-
-                return new ErrorDataResult<List<Rental>>(result.ToList(),Messages.rentalIsRentedTrue);
-
-            }
-            return new SuccessDataResult<List<Rental>>();
-
+            throw new NotImplementedException();
         }
 
         public IResult Delete(Rental businessEntity)
@@ -59,6 +52,19 @@ namespace Business.Concrete
             }
             return new ErrorResult(Messages.rentalDeleteError + " " + result.Message);
             
+        }
+
+        public IDataResult<List<Rental>> IsNotRented(int carId)
+        {
+            var result = _rentalDal.GetAll(c => c.CarId == carId && c.IsRented == true);
+            if (result.ToList().Count > 0)
+            {
+
+                return new ErrorDataResult<List<Rental>>(result.ToList(), Messages.rentalIsRentedTrue);
+
+            }
+            return new SuccessDataResult<List<Rental>>();
+
         }
 
         public IDataResult<List<Rental>> GetAll()
@@ -90,11 +96,6 @@ namespace Business.Concrete
         public IDataResult<IEnumerable<RentalDetailDto>> GetRentalDetailsDto()
         {
             return new SuccessDataResult<IEnumerable<RentalDetailDto>>(_rentalDal.GetRentalDetails());
-        }
-
-        public IResult Update(Rental businessEntity)
-        {
-            throw new NotImplementedException();
         }
 
         public IResult Receive(int carId)

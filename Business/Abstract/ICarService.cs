@@ -15,5 +15,7 @@ namespace Business.Abstract
         IDataResult<List<Car>> GetAllByDailyPrice(decimal min, decimal max);
         IDataResult<List<Car>> GetAllByModelYear(string year);
         IDataResult<IEnumerable<CarDetailDto>> GetCarDetails();
+        IDataResult<IEnumerable<CarDetailDto>> GetCarDetailsByColorId(int colorId);
+        IDataResult<IEnumerable<CarDetailDto>> GetCarDetailsByBrandId(int brandId);
     }
 }

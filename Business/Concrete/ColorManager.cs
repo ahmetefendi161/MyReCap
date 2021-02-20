@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
-using Business.Utilities;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -20,14 +20,12 @@ namespace Business.Concrete
         {
             _colorDal = colorDal;
         }
+
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Add(Color businessEntity)
         {
-            var validationResult = ValidationTool.Validate(new ColorValidator(), businessEntity);
-            if (validationResult.Errors.Count > 0)
-            {
-                return new ErrorResult(validationResult.Errors.Select(x => x.ErrorMessage).Aggregate((a, b) => $"--{a}\n--{b}"));
-            }
-            else if (_colorDal.Get(c => c.ColorName.ToLower() == businessEntity.ColorName.ToLower()) != null)
+            
+            if (_colorDal.Get(c => c.ColorName.ToLower() == businessEntity.ColorName.ToLower()) != null)
             {
                 return new ErrorResult(Messages.colorAddError);
             }
@@ -36,33 +34,28 @@ namespace Business.Concrete
 
         }
 
-        public IResult Delete(Color businessEntity)
-        {
-            if (_colorDal.Get(c => c.Id == businessEntity.Id) != null)
-            {
-                _colorDal.Delete(businessEntity);
-                return new SuccessResult(Messages.colorDeleted);
-            }
-
-            return new ErrorResult(Messages.colorDeleteError);
-
-        }
-
+        [ValidationAspect(typeof(ColorValidator))]
         public IResult Update(Color businessEntity)
         {
-            var validationResult = ValidationTool.Validate(new ColorValidator(), businessEntity);
-            if (validationResult.Errors.Count > 0)
-            {
-                return new ErrorResult(validationResult.Errors.Select(x => x.ErrorMessage).Aggregate((a, b) => $"--{a}\n--{b}"));
-            }
-            else if (_colorDal.Get(c => c.ColorName.ToLower() == businessEntity.ColorName.ToLower()) != null)
-            {
-                return new ErrorResult(Messages.colorUpdateError);
-            }
+
+
             _colorDal.Update(businessEntity);
             return new SuccessResult(Messages.colorUpdated);
 
 
+
+        }
+
+        public IResult Delete(Color businessEntity)
+        {
+            var result = _colorDal.Get(c => c.Id == businessEntity.Id);
+            if (result != null)
+            {
+                _colorDal.Delete(result);
+                return new SuccessResult(Messages.colorDeleted);
+            }
+
+            return new ErrorResult(Messages.colorDeleteError);
 
         }
 

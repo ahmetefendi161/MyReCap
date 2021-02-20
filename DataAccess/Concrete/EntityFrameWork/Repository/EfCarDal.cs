@@ -28,33 +28,40 @@ namespace DataAccess.Concrete.EntityFrameWork.Repository
         // _context bu alanı propertıes olarak tanımlayıp ust sınıftakı protected olan context degıskenınden de get ile döndürebilirdik
         // cunku ust sınıftakı contexte burdakı constractır parametresı olan nesne atandı. 
         // bız oyle yapmak yerıne burdakı constractır parametresı olan nesneın referansını tutan context parametresını burdakı constrıctor ıcınde dırek atadık.
-        private RentACarContext _context; /*{ get { return context as RentACarContext; } }*/
-        
-        public EfCarDal(RentACarContext context) : base(context)
-        {
-            _context = context;
-        }
-        
+       
+        //private RentACarContext _context; /*{ get { return context as RentACarContext; } }*/
 
-        public IEnumerable<CarDetailDto> GetCarDetails() 
+        //public EfCarDal(RentACarContext context) : base(context)
+        //{
+        //    //_context = context;
+        //}
+
+
+        public IEnumerable<CarDetailDto> GetCarDetails(Expression<Func<Car, bool>> filter = null) 
         {
-            
-            
-                var result = from c in _context.Cars
-                             join b in _context.Brands
+            using (RentACarContext context = new RentACarContext())
+            {
+                var result = from c in filter is null ? context.Cars : context.Cars.Where(filter)
+                             join b in context.Brands
                              on c.BrandId equals b.Id
-                             join cl in _context.Colors
+                             join cl in context.Colors
                              on c.ColorId equals cl.Id
                              select new CarDetailDto()
                              {
                                  Id = c.Id,
-                                 BrandName=b.BrandName,
-                                 ColorName=cl.ColorName,
-                                 ModelYear=c.ModelYear,
-                                 DailyPrice=c.DailyPrice,
-                                 Descriptions=c.Descriptions
+                                 BrandName = b.BrandName,
+                                 ColorName = cl.ColorName,
+                                 ModelYear = c.ModelYear,
+                                 DailyPrice = c.DailyPrice,
+                                 Descriptions = c.Descriptions
                              };
                 return result.ToList();
+
+            }
+            
+
+
+                
             
 
         }
